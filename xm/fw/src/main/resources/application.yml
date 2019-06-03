@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    driverClassName: oracle.jdbc.OracleDriver
+   # url: jdbc:oracle:thin:@114.116.88.94:1522:ORCL
+    url: jdbc:oracle:thin:@127.0.0.1:1521:ORCL
+    username: jiabi
+    password: jiabi
+  application:
+    name: api-boot-sample-security-oauth-jwt
+
+server:
+  port: 8001
+  
+
+api:
+  boot:
+    swagger:
+      # 默认开启swagger文档
+      enable: true
+      # 扫描Controller的base package
+      base-package: com.example.fw
+      title: 假币钱袋文档(公共参数:page:当前页面,rows:每一页的条数)
+      description: swagger文档
+      contact:
+        website: 111
+        name: 神绮H亚里亚
+        email: 1348699187@qq.com
+    security:
+#      enable-default-store-delegate: false
+#      away: jdbc
+      users:
+        - username: admin
+          password: admin
+    oauth:
+      jwt:
+        # 开启Jwt转换AccessToken
+        enable: true
+        # 转换Jwt时所需加密key，默认为ApiBoot
+        sign-key: admin
+

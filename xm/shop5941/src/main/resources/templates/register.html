@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>5941--注册</title>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			html{
+				width:100%;
+				height:100%;
+				position:relative;
+				background:#FFFFFF;
+			}
+			body{
+				width:100%;
+				height:100%;
+			}
+			input{outline:none} 
+			input[type=button], input[type=submit], input[type=file], button {cursor:pointer;-webkit-appearance:none;}
+			.boder_div{width:100%;height:100%;}
+			.logodiv{width:100%;height:4rem;line-height:4rem;text-align:center;}
+			.logoimg{width:2.5rem;height:2.5rem;vertical-align:middle;}
+			.inputACC{width:80%;height:0.65rem;margin:auto;border-bottom:1px solid #ccc;margin-top:0.3rem;}
+			.phone{width:100%;height:0.65rem;border:none;font-size:0.26rem;float:left;line-height:0.65rem;text-indent: 1em;}
+			.code{width:65%;height:0.65rem;border:none;font-size:0.26rem;text-indent:1em;float:left;}
+			.huoqubutton{width:30%;height:0.6rem;border:1px solid #666;background:none;border-radius: 3px;font-size:0.26rem;float:right;}
+			.password{width:100%;height:0.65rem;border:none;font-size:0.26rem;float:left;text-indent: 1em;}
+			.inputZC{width:80%;height:0.7rem;margin:auto;border-bottom:1px solid #FFF;margin-top:0.8rem}
+			.inputXZ{width:80%;height:0.7rem;margin:auto;border-bottom:1px solid #FFF;margin-top:0.5rem;}
+			.ZCBUTTON{width:100%;height:0.7rem;background:#ff4200;color:#fff;border:1px solid #ff4200;border-radius: 5px;font-size:0.26rem;float:left;}
+			.XZBUTTON{width:100%;height:0.7rem;background:#fff;color:#ff4200;border:1px solid #ff4200;border-radius: 5px;font-size:0.26rem;float:left;}
+
+			.zhezhao{
+				position:absolute;
+				width:100%;
+				height:100%;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				z-index:99;
+				background:rgba(0,0,0,0.5);
+				display:none;
+			}
+			.alertMessage{
+				position:absolute;
+				width:70%;
+				height:30%;
+				z-index:200;
+				left:50%;
+				top:35%;
+				transform: translateX(-50%);
+				border-radius:20px;
+				border:1px solid #ccc;
+				background:#fff;
+				display:none;
+			}
+			.alertMessage .title{
+			    margin: 0;
+			    display: block;
+			    /*width: 100%;*/
+			    height:0.9rem;
+			    line-height:0.9rem;
+			    padding-left: 20px;
+			    font-size:0.3rem;
+			    border-bottom:1px solid #ccc;
+			}
+			.alertMessage .message{
+				font-size:0.26rem;
+				padding-left:20px;
+				padding-top:20px;
+			}
+			.alertMessage .sure{
+				width:100%;
+				height:0.9rem;
+				position: absolute;
+				font-size:0.3rem;
+				bottom:0;
+				border:none;
+				border-bottom-left-radius: 20px;
+				border-bottom-right-radius: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<div class="boder_div">
+			<div class="logodiv">
+				<img class="logoimg" src="https://gitee.com/ww2510095/bmkj/raw/208d974a435edfd0162e53943e33479726ba6761/assets/images/%E5%95%86%E6%A0%87-300.jpg" />
+			</div>
+			<form id="registerForm">
+			<div class="inputACC">
+				<input class="phone" type="text" id="username" name="uname" placeholder="输入手机号"/>
+			</div>
+			<div class="inputACC">
+				<input class="code" type="text" id="code" name="code" placeholder="输入验证码"/>
+				<input class="huoqubutton" onclick="getCode()" type="button" value="获取验证码" />
+			</div>
+			<div class="inputACC">
+				<input class="password" type="password" id="password" name="password" placeholder="设置密码"/>
+				<input type="hidden" id="type" name="type" value="1"/>
+				<input type="hidden" id="recommend" name="recommend" value=""/>
+				<span style="display:none" th:text="${mphne}" id="mphne"></span>
+				<span style="display:none" th:text="${appurl}" id="appurl"></span>
+			</div>
+			</form>
+			
+			
+			<div class="inputZC">
+				<input class="ZCBUTTON" onclick="register()" type="button" id="register" value="注 册"/>
+				<!--<a onclick="submitFn()" ><input class="XZBUTTON" type="button" id="download" value="下载APP"/></a>-->
+			</div>
+			<div class="inputXZ" id="inputXZ">
+				<!--<a href="http://www.wandoujia.com/apps-io.dcloud.H5E369D9B" ><input class="XZBUTTON" type="button" id="download" onclick="gotodownload()" value="下载APP"/></a>-->
+				<a onclick="submitFn()" ><input class="XZBUTTON" type="button" id="download" value="下载APP"/></a>
+			</div>
+		</div>
+		
+		<div class="zhezhao">
+			<div class="alertMessage">
+				<p class="title">5941商城</p>
+				<div class="message">
+					
+				</div>
+				<input class="sure" type="button" value="确定" />
+			</div>
+		</div>	
+
+	</body>
+</html>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+<script>
+	(function (doc, win) {
+	    //取得html的引用
+	    var docEl = doc.documentElement,
+	        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+	        recalc = function () {
+	            var clientWidth = docEl.clientWidth;
+	            if (!clientWidth) return;
+	            clientWidth = (clientWidth > 640 )  ?  640 : clientWidth ;
+	            docEl.style.fontSize = 100 * (clientWidth / 640 ) + 'px';
+	        };
+	    if (!doc.addEventListener) return;
+	    win.addEventListener(resizeEvt, recalc, false);
+	    recalc();
+	
+	})(document, window);
+	
+	var address = "http://www.bming.net:8091";
+	//var address = "http://192.168.1.17:8091";
+	function register(){	
+		var mphne = document.getElementById("mphne").innerHTML;
+		if(mphne==undefined||mphne==""||mphne==null){
+			document.getElementById("recommend").value=null;
+		}else{
+			document.getElementById("recommend").value=mphne;
+		}
+		var registerform = new FormData(document.getElementById("registerForm"));
+		$.ajax({
+			cache: false,  
+			processData: false,  
+			contentType: false,
+			url:address+"/member/add",
+			type:"POST",
+			data:registerform,
+			success:function(data){
+			$('.zhezhao').show();
+			$('.alertMessage').show();
+			$('.alertMessage .message').html(data.message);
+			if(data.status==200||data.message=="用户已注册"){
+			var a =document.getElementById("inputXZ");
+				a.style.display="block";
+			}
+				
+				
+			},
+			error:function(e){}
+		});
+
+	}
+	
+	function submitFn(){
+	    //判断浏览器
+	   // var u = navigator.userAgent;
+	    /* if(/MicroMessenger/gi.test(u)) {
+	       // 引导用户在浏览器中打开
+	        alert('请在浏览器中打开');
+	        return;
+	    } 
+	    if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
+	        //Android
+			window.location.href = "http://114.116.88.94:8080/5941.apk";
+	    }else if(u.indexOf('iPhone') > -1){
+	        //IOS
+	        window.location.href = "https://itunes.apple.com/cn/app/id1424059090?mt=8";
+	    } */   
+	    
+	    	$.ajax({
+			cache: false,  
+			processData: false,  
+			contentType: false,
+			url:address+"/download/downloadApp/url",
+			type:"POST",
+			success:function(data){
+			window.location.href = data;
+				
+			},
+			error:function(e){}
+		});
+	};
+	
+	//遮罩关闭
+	$('.sure').click(function(){
+		$('.alertMessage').hide();
+		$('.zhezhao').hide();
+	})
+	
+	function  getCode(){
+
+		var phone = document.getElementById("username").value;
+		 $.ajax({
+			url:address+"/phonemessage/send",
+			type:"POST",
+			data:{"phone":phone,"type":"0"},
+			success:function(data){
+				$('.zhezhao').show();
+				$('.alertMessage').show();
+				$('.alertMessage .message').html(data.message);
+			},
+			error:function(e){"验证码发送失败!"}
+		 });
+	}
+	
+	function gotodownload(){
+		location.href=""+document.getElementById("appurl").innerHTML;
+	}
+	
+</script>
